@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class PlateFragment extends Fragment {
+public class PlateFragment extends btFragment {
     private View v;
     private String plateNo;
 
@@ -50,6 +50,8 @@ public class PlateFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("plateNo", plateNoText.getText().toString());
+
+                // TODO: Will need to refactor this logic. Send data -> wait for readBtData to be called
                 if(sendPlateNo(plateNoText.getText().toString())){
                     navController.navigate(R.id.action_plateFragment_to_occupiedFragment, bundle);
                 }
@@ -66,5 +68,11 @@ public class PlateFragment extends Fragment {
      */
     private Boolean sendPlateNo (String plateNo){
         return false;
+    }
+
+    /* TODO: Wait for DE1 to tell us whether the plate is connected to an account or not */
+    @Override
+    public void readBtData(String msg) {
+
     }
 }

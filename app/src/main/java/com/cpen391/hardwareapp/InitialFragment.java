@@ -4,16 +4,16 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class InitialFragment extends Fragment {
+public class InitialFragment extends btFragment{
     private View v;
     private String plateNo;
 
@@ -41,11 +41,17 @@ public class InitialFragment extends Fragment {
     }
 
     /**
-     * TODO: Implement bluetooth functionality
+     * TODO: Implement bluetooth functionality to listen through bluetooth for the start of a parking session
      */
-    private void navigateToDetectView (){
+    @Override
+    public void readBtData(String msg) {
+
+    }
+
+    //TODO
+    private void navigateToDetectView (String msg){
         Bundle bundle = new Bundle();
-        bundle.putString("plateNo", plateNo);
+        bundle.putString(msg, plateNo);
         final NavController navController = Navigation.findNavController(v);
         navController.navigate(R.id.action_initialFragment_to_detectFragment, bundle);
     }

@@ -9,9 +9,10 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class OccupiedFragment extends Fragment {
+public class OccupiedFragment extends btFragment {
     private View v;
     private String plateNo;
 
@@ -34,5 +35,14 @@ public class OccupiedFragment extends Fragment {
     private void endSession(){
         final NavController navController = Navigation.findNavController(v);
         navController.navigate(R.id.action_occupiedFragment_to_initialFragment);
+    }
+
+    /**
+     * TODO: Will be called if device received data through bluetooth
+     */
+    @Override
+    public void readBtData(String msg) {
+        TextView plateNoText = v.findViewById(R.id.PlateNumber);
+        plateNoText.setText(msg + plateNo);
     }
 }

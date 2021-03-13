@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class PaymentFragment extends Fragment {
+public class PaymentFragment extends btFragment {
     private View v;
     private String plateNo;
 
