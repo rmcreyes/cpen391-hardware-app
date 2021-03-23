@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/initialFragment">
+    <fragment
+        android:id="@+id/initialFragment"
+        android:name="com.cpen391.hardwareapp.InitialFragment"
+        android:label="fragment_initial"
+        tools:layout="@layout/fragment_initial" >
+        <action
+            android:id="@+id/action_initialFragment_to_plateFragment"
+            app:destination="@id/plateFragment" />
+        <action
+            android:id="@+id/action_initialFragment_to_detectFragment"
+            app:destination="@id/detectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/plateFragment"
+        android:name="com.cpen391.hardwareapp.PlateFragment"
+        android:label="fragment_plate"
+        tools:layout="@layout/fragment_plate">
+        <action
+            android:id="@+id/action_plateFragment_to_occupiedFragment"
+            app:destination="@id/occupiedFragment" />
+        <action
+            android:id="@+id/action_plateFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+        <argument
+            android:name="plateNo"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.cpen391.hardwareapp.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_occupiedFragment"
+            app:destination="@id/occupiedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detectFragment"
+        android:name="com.cpen391.hardwareapp.DetectFragment"
+        android:label="fragment_detect"
+        tools:layout="@layout/fragment_detect" >
+        <action
+            android:id="@+id/action_detectFragment_to_plateFragment"
+            app:destination="@id/plateFragment" />
+        <action
+            android:id="@+id/action_detectFragment_to_occupiedFragment"
+            app:destination="@id/occupiedFragment" />
+        <action
+            android:id="@+id/action_detectFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/occupiedFragment"
+        android:name="com.cpen391.hardwareapp.OccupiedFragment"
+        android:label="fragment_occupied"
+        tools:layout="@layout/fragment_occupied" >
+        <action
+            android:id="@+id/action_occupiedFragment_to_initialFragment"
+            app:destination="@id/initialFragment" />
+    </fragment>
+</navigation>
