@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 switch(msg.what){
                     case Constants.MESSAGE_READ:
-                        byte[] readBuf = (byte[]) msg.obj;
-                        // construct a string from the valid bytes in the buffer
-                        String readMessage = Integer.toString( ByteBuffer.wrap(readBuf).getInt());
+                         String readMessage = (String) msg.obj;
 
                         /* Get current displaying fragment to process message accordingly */
                         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.navHostFragment);
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
         // This call returns a handle to the one bluetooth device within your Android device
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
