@@ -52,8 +52,9 @@
             android:layout_weight="2"
             android:gravity="center"
             android:hint="ABC123"
-            android:inputType="text"
+            android:inputType="text|textCapCharacters"
             android:maxLength="6"
+            android:textAllCaps="true"
             android:textSize="50dp" />
 
     </LinearLayout>

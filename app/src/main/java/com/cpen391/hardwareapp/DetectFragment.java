@@ -68,7 +68,7 @@ public class DetectFragment extends btFragment {
 
     /**
      * Received Bluetooth message from DE1
-     * We are expecting a string in the format "OK,USER,ABCABC" or "OK,NOT USER,ABCABC"
+     * We are expecting a string in the format "OK,USER,ABCABC" or "OK,NOTUSER,ABCABC"
      * ABCABC - is the plate number
      * USER - means that the plate is connected to a registered account (don't need to enter payment info)
      * NOTUSER - means that no account exists, and user needs to enter payment info

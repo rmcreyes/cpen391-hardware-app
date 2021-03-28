@@ -54,7 +54,7 @@ public class PlateFragment extends btFragment {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plateNo = plateNoText.getText().toString();
+                plateNo = plateNoText.getText().toString().toUpperCase();
 
                 /* check if entered plate number is valid */
                 if(plateNo.length() != 6){

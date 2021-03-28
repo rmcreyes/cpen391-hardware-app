@@ -65,7 +65,7 @@ public class PaymentFragment extends btFragment {
             return false;
         }
         else {
-            String message = cardNum + "," + expDate + "," + cvv + "," + country + "," + plateNo;
+            String message = "PAYMENT," + cardNum + "," + expDate + "," + cvv + "," + country + "," + plateNo;
             MainActivity.btWrite(message);
             return true;
         }
@@ -73,15 +73,15 @@ public class PaymentFragment extends btFragment {
 
     /**
      * Received Bluetooth message from DE1
-     * We are expecting a string in the format "OK,ABCABC"
+     * We are expecting a string in the format "OK,DONE,ABCABC"
      * ABCABC - is the plate number
      *
      * Messages in any other formats are currently ignored
      */
     @Override
     public void readBtData(String msg) {
-        String[] strArray = msg.split(",", 2);
-        if (strArray[0].equals("OK")){
+        String[] strArray = msg.split(",", 3);
+        if (strArray[0].equals("OK") && strArray[1].equals("DONE")){
             final NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_paymentFragment_to_occupiedFragment, bundle);
         }
