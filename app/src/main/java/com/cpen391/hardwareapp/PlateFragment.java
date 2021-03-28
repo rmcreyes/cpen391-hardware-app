@@ -18,8 +18,8 @@ import android.widget.Toast;
 public class PlateFragment extends btFragment {
     private View v;
     private String plateNo;
-    private String sendString;
     private Bundle bundle = new Bundle();
+    private Boolean detected = false;
 
 
     @Override
@@ -31,13 +31,13 @@ public class PlateFragment extends btFragment {
         plateNo = getArguments().getString("plateNo");
         if (plateNo == null){
             /* User manually started session*/
-            sendString = "NEW,";
+            detected = false;
         }
         else{
             /* User wants to modify the detected plate number */
             EditText plateNoText = v.findViewById(R.id.PlateNumber);
             plateNoText.setText(plateNo);
-            sendString = "FALSE,";
+            detected = true;
         }
         return v;
     }
@@ -76,7 +76,12 @@ public class PlateFragment extends btFragment {
      * NEW - this is a parking session manually started by the user (DE1 should initiate the new parking session with isConfirmed = true)
      */
     private void sendPlateNo (String plateNo){
-        sendString = sendString + plateNo;
+        String sendString;
+        if (detected == true){
+            sendString = "FALSE," + plateNo;
+        }else{
+            sendString = "NEW," + plateNo;
+        }
         MainActivity.btWrite(sendString);
         return;
     }
