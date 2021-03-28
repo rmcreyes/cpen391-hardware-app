@@ -15,7 +15,6 @@ import android.widget.Button;
 
 public class InitialFragment extends btFragment{
     private View v;
-    private String plateNo;
 
 
     @Override
@@ -30,6 +29,7 @@ public class InitialFragment extends btFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         final NavController navController = Navigation.findNavController(v);
+
         /* User Manually starting parking instance */
         Button enterBtn = v.findViewById(R.id.EnterBtn);
         enterBtn.setOnClickListener(new View.OnClickListener() {
@@ -41,17 +41,25 @@ public class InitialFragment extends btFragment{
     }
 
     /**
-     * TODO: Implement bluetooth functionality to listen through bluetooth for the start of a parking session
+     * Bluetooth connection received a message from the DE1
+     * We are expecting a string in the format "CONFIRM,ABCABC" where ABCABC is the detected plate number
+     * Any messages in other formats are ignored.
      */
     @Override
     public void readBtData(String msg) {
-
+        String[] strArray = msg.split(",", 2);
+        if (strArray[0].equals("CONFIRM")){
+            navigateToDetectView(strArray[1]);
+        }
     }
 
-    //TODO
-    private void navigateToDetectView (String msg){
+    /**
+     * Navigate to the Detected Fragment after DE1 detects a new parking session
+     * @param plateNo - plate number parsed from DE1 message
+     */
+    private void navigateToDetectView (String plateNo){
         Bundle bundle = new Bundle();
-        bundle.putString(msg, plateNo);
+        bundle.putString("plateNo", plateNo);
         final NavController navController = Navigation.findNavController(v);
         navController.navigate(R.id.action_initialFragment_to_detectFragment, bundle);
     }

@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     private Context context;
-    Handler mHandler;
-    BluetoothThread btThread;
-    FragmentManager fragmentManager;
+    private Handler mHandler;
+    private static BluetoothThread btThread;
+    private FragmentManager fragmentManager;
 
     // a bluetooth “socket” to a bluetooth device
     private static BluetoothSocket mmSocket = null;
@@ -201,6 +201,12 @@ public class MainActivity extends AppCompatActivity {
             mmInStream = mmSocket.getInputStream();
             mmOutStream = mmSocket.getOutputStream();
         } catch (IOException e) {
+        }
+    }
+
+    public static void btWrite(String msg){
+        if (btThread != null) {
+            btThread.WriteToBTDevice(msg);
         }
     }
 }
