@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +83,9 @@ public class OccupiedFragment extends btFragment {
     public static String calcCost(int unitPrice, String duration) {
         String delims = "[:]";
         String[] tokens = duration.split(delims);
-        double timeHr = Math.ceil(Double.parseDouble(tokens[0]) + (Double.parseDouble(tokens[1])/60));
+        
+        /* +1 minute takes care of case when parking session is in the first minute of the hour (like 00:00:30), this already counts as parking for the hour */
+        double timeHr = Math.ceil(Double.parseDouble(tokens[0]) + ((Double.parseDouble(tokens[1]) + 1)/60));
         return(String.format("%.2f", timeHr*unitPrice));
     }
 }
