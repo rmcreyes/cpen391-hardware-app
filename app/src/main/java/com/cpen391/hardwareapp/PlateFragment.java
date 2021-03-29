@@ -13,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class PlateFragment extends btFragment {
     private View v;
     private String plateNo;
+    private Bundle bundle = new Bundle();
+    private Boolean detected = false;
 
 
     @Override
@@ -25,14 +28,16 @@ public class PlateFragment extends btFragment {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_plate, container, false);
 
-        plateNo = getArguments().getString("plateNo");
+        plateNo = getArguments().getString(Constants.plateNo);
         if (plateNo == null){
             /* User manually started session*/
+            detected = false;
         }
         else{
             /* User wants to modify the detected plate number */
             EditText plateNoText = v.findViewById(R.id.PlateNumber);
             plateNoText.setText(plateNo);
+            detected = true;
         }
         return v;
     }
@@ -43,36 +48,65 @@ public class PlateFragment extends btFragment {
         final NavController navController = Navigation.findNavController(v);
 
         EditText plateNoText = v.findViewById(R.id.PlateNumber);
-        /* Navigation to adding a car to the account */
+
+        /* User confirms/submits the plate number */
         Button confirmBtn = v.findViewById(R.id.ConfirmBtn);
+        confirmBtn.setEnabled(true);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("plateNo", plateNoText.getText().toString());
+                plateNo = plateNoText.getText().toString().toUpperCase();
 
-                // TODO: Will need to refactor this logic. Send data -> wait for readBtData to be called
-                if(sendPlateNo(plateNoText.getText().toString())){
-                    navController.navigate(R.id.action_plateFragment_to_occupiedFragment, bundle);
+                /* check if entered plate number is valid */
+                if(plateNo.length() != 6){
+                    Toast.makeText(getContext(), "Invalid Entry: Please enter a valid 6 digit plate number", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    navController.navigate(R.id.action_plateFragment_to_paymentFragment, bundle);
+                else {
+                    bundle.putString(Constants.plateNo, plateNo);
+                    confirmBtn.setEnabled(false);
+                    sendPlateNo(plateNo);
                 }
             }
         });
     }
 
     /**
-     * TODO: Implement function to send entered plate number to DE1
-     * @return returns true if account exists
+     * send entered plate number to DE1
+     * Message in the format of FALSE,ABCABC or NEW,ABCABC
+     * where ABCABC is the manually entered plate number
+     * FALSE - the plate number detected by DE1 is incorrect, user manually modified it
+     * NEW - this is a parking session manually started by the user (DE1 should initiate the new parking session with isConfirmed = true)
      */
-    private Boolean sendPlateNo (String plateNo){
-        return false;
+    private void sendPlateNo (String plateNo){
+        String sendString;
+        if (detected == true){
+            sendString = Constants.CONFIRM_FALSE + plateNo;
+        }else{
+            sendString = Constants.CONFIRM_NEW + plateNo;
+        }
+        MainActivity.btWrite(sendString);
+        return;
     }
 
-    /* TODO: Wait for DE1 to tell us whether the plate is connected to an account or not */
+    /**
+     * Received Bluetooth message from DE1
+     * We are expecting a string in the format "OK,USER,ABCABC" or "OK,NOTUSER,ABCABC"
+     * ABCABC - is the plate number
+     * USER - means that the plate is connected to a registered account (don't need to enter payment info)
+     * NOTUSER - means that no account exists, and user needs to enter payment info
+     *
+     * Messages in any other formats are ignored
+     */
     @Override
     public void readBtData(String msg) {
-
+        String[] strArray = msg.split(",", 3);
+        if (strArray[0].equals(Constants.OK)){
+            final NavController navController = Navigation.findNavController(v);
+            if(strArray[1].equals(Constants.USER)){
+                navController.navigate(R.id.action_plateFragment_to_occupiedFragment, bundle);
+            }else{
+                navController.navigate(R.id.action_plateFragment_to_paymentFragment, bundle);
+            }
+        }
     }
 }

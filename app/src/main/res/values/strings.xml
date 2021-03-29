@@ -7,6 +7,6 @@
     <string name="CVV">CVV</string>
     <string name="CVV_example">123</string>
     <string name="Exp_Date">Exp. Date</string>
-    <string name="Exp_example">MM/YY</string>
+    <string name="Exp_example">MMYY</string>
     <string name="Card_Number">Card Number</string>
 </resources>

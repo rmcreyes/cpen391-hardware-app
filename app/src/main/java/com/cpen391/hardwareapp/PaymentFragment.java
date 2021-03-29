@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PaymentFragment extends btFragment {
     private View v;
     private String plateNo;
+    private Bundle bundle = new Bundle();
 
 
     @Override
@@ -25,7 +27,8 @@ public class PaymentFragment extends btFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_payment, container, false);
-        plateNo = getArguments().getString("plateNo");
+        plateNo = getArguments().getString(Constants.plateNo);
+        bundle.putString(Constants.plateNo, plateNo);
 
         return v;
     }
@@ -35,34 +38,53 @@ public class PaymentFragment extends btFragment {
         super.onViewCreated(view, savedInstanceState);
         final NavController navController = Navigation.findNavController(v);
 
-        /* Navigation to adding a car to the account */
+        /* Send payment info to de1*/
         Button confirmBtn = v.findViewById(R.id.ConfirmBtn);
+        confirmBtn.setEnabled(true);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("plateNo", plateNo);
-
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
                 EditText expDateEdit = v.findViewById(R.id.expDateEdit);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
-                EditText countryEdit = v.findViewById(R.id.countryEdit);
+                confirmBtn.setEnabled(false);
 
-                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString(),countryEdit.getText().toString());
-
-                navController.navigate(R.id.action_paymentFragment_to_occupiedFragment, bundle);
+                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
             }
         });
     }
 
     /**
-     * TODO: send payment information to DE1
-     * @param cardNum
-     * @param expDate
-     * @param cvv
-     * @param country
+     * send payment information to DE1
+     * string format = "cardNum,expDate,cvv,plateNo"
      */
-    private void sendPayment (String cardNum, String expDate, String cvv, String country){
+    private boolean sendPayment (String cardNum, String expDate, String cvv){
 
+        /* Check if any field are empty */
+        if(cardNum == null || expDate == null|| cvv == null ){
+            Toast.makeText(getContext(), "Payment information cannot be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
+            String message = Constants.PAYMENT + cardNum + "," + expDate + "," + cvv + "," + plateNo;
+            MainActivity.btWrite(message);
+            return true;
+        }
+    }
+
+    /**
+     * Received Bluetooth message from DE1
+     * We are expecting a string in the format "OK,DONE,ABCABC"
+     * ABCABC - is the plate number
+     *
+     * Messages in any other formats are currently ignored
+     */
+    @Override
+    public void readBtData(String msg) {
+        String[] strArray = msg.split(",", 3);
+        if (strArray[0].equals(Constants.OK) && strArray[1].equals(Constants.DONE)){
+            final NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_paymentFragment_to_occupiedFragment, bundle);
+        }
     }
 }

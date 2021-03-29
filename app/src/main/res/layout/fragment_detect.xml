@@ -51,8 +51,8 @@
             android:layout_margin="8dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="ABC123"
-            android:textSize="70dp"
+            android:text="ABCABC"
+            android:textSize="60dp"
             android:textColor="@color/teal_700"/>
 
     </LinearLayout>
