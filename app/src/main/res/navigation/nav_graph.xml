@@ -60,7 +60,8 @@
         android:id="@+id/occupiedFragment"
         android:name="com.cpen391.hardwareapp.OccupiedFragment"
         android:label="fragment_occupied"
-        tools:layout="@layout/fragment_occupied" >
+        tools:layout="@layout/fragment_occupied"
+        app:startDestination="@id/action_occupiedFragment_to_initialFragment">
         <action
             android:id="@+id/action_occupiedFragment_to_initialFragment"
             app:destination="@id/initialFragment" />
