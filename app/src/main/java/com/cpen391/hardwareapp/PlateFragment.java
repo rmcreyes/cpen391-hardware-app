@@ -78,9 +78,9 @@ public class PlateFragment extends btFragment {
     private void sendPlateNo (String plateNo){
         String sendString;
         if (detected == true){
-            sendString = "FALSE," + plateNo;
+            sendString = "CONFIRM,FALSE," + plateNo;
         }else{
-            sendString = "NEW," + plateNo;
+            sendString = "CONFIRM,NEW," + plateNo;
         }
         MainActivity.btWrite(sendString);
         return;

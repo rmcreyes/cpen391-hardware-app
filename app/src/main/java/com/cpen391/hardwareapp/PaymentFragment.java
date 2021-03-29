@@ -46,26 +46,25 @@ public class PaymentFragment extends btFragment {
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
                 EditText expDateEdit = v.findViewById(R.id.expDateEdit);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
-                EditText countryEdit = v.findViewById(R.id.countryEdit);
 
-                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString(),countryEdit.getText().toString());
+                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
             }
         });
     }
 
     /**
      * send payment information to DE1
-     * string format = "cardNum,expDate,cvv,country,plateNo"
+     * string format = "cardNum,expDate,cvv,plateNo"
      */
-    private boolean sendPayment (String cardNum, String expDate, String cvv, String country){
+    private boolean sendPayment (String cardNum, String expDate, String cvv){
 
         /* Check if any field are empty */
-        if(cardNum == null || expDate == null|| cvv == null ||country == null){
+        if(cardNum == null || expDate == null|| cvv == null ){
             Toast.makeText(getContext(), "Payment information cannot be empty!", Toast.LENGTH_SHORT).show();
             return false;
         }
         else {
-            String message = "PAYMENT," + cardNum + "," + expDate + "," + cvv + "," + country + "," + plateNo;
+            String message = "PAYMENT," + cardNum + "," + expDate + "," + cvv + "," + plateNo;
             MainActivity.btWrite(message);
             return true;
         }

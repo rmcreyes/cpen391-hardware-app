@@ -61,7 +61,7 @@ public class DetectFragment extends btFragment {
      * Send confirmation to DE1 that plate number is correct
      */
     private void confirm (){
-        String message = "TRUE," + plateNo;
+        String message = "CONFIRM,TRUE," + plateNo;
         MainActivity.btWrite(message);
         return;
     }
