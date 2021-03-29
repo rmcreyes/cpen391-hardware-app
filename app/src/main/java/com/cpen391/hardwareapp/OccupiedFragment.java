@@ -46,12 +46,12 @@ public class OccupiedFragment extends btFragment {
                 int seconds = (int) (millis / 1000) %60;
                 int minutes = (int) (millis/(1000 * 60)%60);
                 int hours = (int) (millis/(1000 * 60 * 60));
-                String durationStr = String.format("%02d", hours)+ ":" + String.format("%02d", minutes);
+                String durationStr = String.format("%02d", hours)+ ":" + String.format("%02d", minutes)+ ":" + String.format("%02d", seconds);
 
                 /* Update displayed timer and re-calculate cost */
                 duration.setText(durationStr);
                 cost.setText(calcCost(MainActivity.sp.getInt(Constants.unitPriceStr,0), durationStr));
-                timerHandler.postDelayed(this, 30000);
+                timerHandler.postDelayed(this, 1000);
             }
         };
         timerHandler.postDelayed(timerRunnable, 0);
@@ -83,7 +83,7 @@ public class OccupiedFragment extends btFragment {
     public static String calcCost(int unitPrice, String duration) {
         String delims = "[:]";
         String[] tokens = duration.split(delims);
-        
+
         /* +1 minute takes care of case when parking session is in the first minute of the hour (like 00:00:30), this already counts as parking for the hour */
         double timeHr = Math.ceil(Double.parseDouble(tokens[0]) + ((Double.parseDouble(tokens[1]) + 1)/60));
         return(String.format("%.2f", timeHr*unitPrice));
