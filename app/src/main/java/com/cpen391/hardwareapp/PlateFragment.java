@@ -28,7 +28,7 @@ public class PlateFragment extends btFragment {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_plate, container, false);
 
-        plateNo = getArguments().getString("plateNo");
+        plateNo = getArguments().getString(Constants.plateNo);
         if (plateNo == null){
             /* User manually started session*/
             detected = false;
@@ -51,6 +51,7 @@ public class PlateFragment extends btFragment {
 
         /* User confirms/submits the plate number */
         Button confirmBtn = v.findViewById(R.id.ConfirmBtn);
+        confirmBtn.setEnabled(true);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +62,8 @@ public class PlateFragment extends btFragment {
                     Toast.makeText(getContext(), "Invalid Entry: Please enter a valid 6 digit plate number", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    bundle.putString("plateNo", plateNo);
+                    bundle.putString(Constants.plateNo, plateNo);
+                    confirmBtn.setEnabled(false);
                     sendPlateNo(plateNo);
                 }
             }
@@ -78,9 +80,9 @@ public class PlateFragment extends btFragment {
     private void sendPlateNo (String plateNo){
         String sendString;
         if (detected == true){
-            sendString = "CONFIRM,FALSE," + plateNo;
+            sendString = Constants.CONFIRM_FALSE + plateNo;
         }else{
-            sendString = "CONFIRM,NEW," + plateNo;
+            sendString = Constants.CONFIRM_NEW + plateNo;
         }
         MainActivity.btWrite(sendString);
         return;
@@ -98,9 +100,9 @@ public class PlateFragment extends btFragment {
     @Override
     public void readBtData(String msg) {
         String[] strArray = msg.split(",", 3);
-        if (strArray[0].equals("OK")){
+        if (strArray[0].equals(Constants.OK)){
             final NavController navController = Navigation.findNavController(v);
-            if(strArray[1].equals("USER")){
+            if(strArray[1].equals(Constants.USER)){
                 navController.navigate(R.id.action_plateFragment_to_occupiedFragment, bundle);
             }else{
                 navController.navigate(R.id.action_plateFragment_to_paymentFragment, bundle);

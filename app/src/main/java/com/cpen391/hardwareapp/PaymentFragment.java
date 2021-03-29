@@ -27,8 +27,8 @@ public class PaymentFragment extends btFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_payment, container, false);
-        plateNo = getArguments().getString("plateNo");
-        bundle.putString("plateNo", plateNo);
+        plateNo = getArguments().getString(Constants.plateNo);
+        bundle.putString(Constants.plateNo, plateNo);
 
         return v;
     }
@@ -40,12 +40,14 @@ public class PaymentFragment extends btFragment {
 
         /* Send payment info to de1*/
         Button confirmBtn = v.findViewById(R.id.ConfirmBtn);
+        confirmBtn.setEnabled(true);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
                 EditText expDateEdit = v.findViewById(R.id.expDateEdit);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
+                confirmBtn.setEnabled(false);
 
                 sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
             }
@@ -64,7 +66,7 @@ public class PaymentFragment extends btFragment {
             return false;
         }
         else {
-            String message = "PAYMENT," + cardNum + "," + expDate + "," + cvv + "," + plateNo;
+            String message = Constants.PAYMENT + cardNum + "," + expDate + "," + cvv + "," + plateNo;
             MainActivity.btWrite(message);
             return true;
         }
@@ -80,7 +82,7 @@ public class PaymentFragment extends btFragment {
     @Override
     public void readBtData(String msg) {
         String[] strArray = msg.split(",", 3);
-        if (strArray[0].equals("OK") && strArray[1].equals("DONE")){
+        if (strArray[0].equals(Constants.OK) && strArray[1].equals(Constants.DONE)){
             final NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_paymentFragment_to_occupiedFragment, bundle);
         }

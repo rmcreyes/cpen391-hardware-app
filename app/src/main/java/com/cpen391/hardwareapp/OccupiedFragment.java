@@ -21,7 +21,7 @@ public class OccupiedFragment extends btFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_occupied, container, false);
-        plateNo = getArguments().getString("plateNo");
+        plateNo = getArguments().getString(Constants.plateNo);
 
         TextView plateNoText = v.findViewById(R.id.PlateNumber);
         plateNoText.setText(plateNo);
@@ -39,7 +39,7 @@ public class OccupiedFragment extends btFragment {
     @Override
     public void readBtData(String msg) {
         String[] strArray = msg.split(",", 2);
-        if (strArray[0].equals("END")){
+        if (strArray[0].equals(Constants.END)){
             final NavController navController = Navigation.findNavController(v);
             if(strArray[1].equals(plateNo)) {
                 navController.navigate(R.id.action_occupiedFragment_to_initialFragment);

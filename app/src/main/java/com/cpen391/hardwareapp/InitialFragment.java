@@ -48,7 +48,7 @@ public class InitialFragment extends btFragment{
     @Override
     public void readBtData(String msg) {
         String[] strArray = msg.split(",", 2);
-        if (strArray[0].equals("CONFIRM")){
+        if (strArray[0].equals(Constants.CONFIRM)){
             navigateToDetectView(strArray[1]);
         }
     }
@@ -59,7 +59,7 @@ public class InitialFragment extends btFragment{
      */
     private void navigateToDetectView (String plateNo){
         Bundle bundle = new Bundle();
-        bundle.putString("plateNo", plateNo);
+        bundle.putString(Constants.plateNo, plateNo);
         final NavController navController = Navigation.findNavController(v);
         navController.navigate(R.id.action_initialFragment_to_detectFragment, bundle);
     }
