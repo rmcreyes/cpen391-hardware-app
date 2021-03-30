@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
      *       Modify logic if tablet will be paired with more than one device,
      *       and we need to specify which one to connect with
      * */
-
+    public static SharedPreferences sp;
     private final static int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     private Context context;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sp = getSharedPreferences("meter",MODE_PRIVATE);
+        sp.edit().putInt(Constants.unitPriceStr, Constants.unitPrice).apply();
 
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
         context = getApplicationContext();
