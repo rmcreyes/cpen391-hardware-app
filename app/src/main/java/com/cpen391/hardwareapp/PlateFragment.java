@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,8 @@ public class PlateFragment extends btFragment {
     private View v;
     private String plateNo;
     private Bundle bundle = new Bundle();
-    private Boolean detected = false;
+    private long timeLeftInMillis;
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -28,17 +31,13 @@ public class PlateFragment extends btFragment {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_plate, container, false);
 
-        plateNo = getArguments().getString(Constants.plateNo);
-        if (plateNo == null){
-            /* User manually started session*/
-            detected = false;
-        }
-        else{
-            /* User wants to modify the detected plate number */
-            EditText plateNoText = v.findViewById(R.id.PlateNumber);
-            plateNoText.setText(plateNo);
-            detected = true;
-        }
+        plateNo = getArguments().getString(Constants.plateNo,"");
+        /* User wants to modify the detected plate number */
+        EditText plateNoText = v.findViewById(R.id.PlateNumber);
+        plateNoText.setText(plateNo);
+
+        /* Continue the 2 minutes timeout for waiting for a confirmation */
+        timeLeftInMillis = getArguments().getLong(Constants.counterTimerInMilli);
         return v;
     }
 
@@ -55,6 +54,7 @@ public class PlateFragment extends btFragment {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel(); // stop the timer since user confirmed
                 plateNo = plateNoText.getText().toString().toUpperCase();
 
                 /* check if entered plate number is valid */
@@ -68,6 +68,33 @@ public class PlateFragment extends btFragment {
                 }
             }
         });
+
+        /* Start a count down timer until app times out waiting for the user's input */
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+            }
+
+            @Override
+            public void onFinish() {
+                timeout();
+            }
+        }.start();
+    }
+
+
+    /**
+     * Timeout function since user did not respond
+     * send timeout message to DE1
+     * return back to initial screen
+     */
+    private void timeout (){
+        String message = Constants.CONFIRM_TIMEOUT;
+        MainActivity.btWrite(message);
+        final NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.action_plateFragment_to_initialFragment);
+        return;
     }
 
     /**
@@ -79,11 +106,7 @@ public class PlateFragment extends btFragment {
      */
     private void sendPlateNo (String plateNo){
         String sendString;
-        if (detected == true){
-            sendString = Constants.CONFIRM_FALSE + plateNo;
-        }else{
-            sendString = Constants.CONFIRM_NEW + plateNo;
-        }
+        sendString = Constants.CONFIRM_FALSE + plateNo;
         MainActivity.btWrite(sendString);
         return;
     }
