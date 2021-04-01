@@ -7,6 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ public class DetectFragment extends btFragment {
     private View v;
     private String plateNo;
     Bundle bundle = new Bundle();
+    private long timeLeftInMillis = 2*60*1000; /* 2 minute-timeout for waiting for an confirmation */
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -26,15 +31,17 @@ public class DetectFragment extends btFragment {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_detect, container, false);
 
+        /* Get the detected plate number */
         plateNo = getArguments().getString(Constants.plateNo);
         bundle.putString(Constants.plateNo, plateNo);
         TextView plateNoText = v.findViewById(R.id.PlateNumber);
         plateNoText.setText(plateNo);
+
         return v;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final NavController navController = Navigation.findNavController(v);
 
@@ -46,6 +53,7 @@ public class DetectFragment extends btFragment {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel();
                 confirmBtn.setEnabled(false);
                 modifyBtn.setEnabled(false);
                 confirm();
@@ -56,9 +64,37 @@ public class DetectFragment extends btFragment {
         modifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel();
+                bundle.putLong(Constants.counterTimerInMilli, timeLeftInMillis);
                 navController.navigate(R.id.action_detectFragment_to_plateFragment, bundle);
             }
         });
+
+        /* Start a timer to count down till app times out while waiting for the user's confirmation */
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+            }
+
+            @Override
+            public void onFinish() {
+                timeout();
+            }
+        }.start();
+    }
+
+    /**
+     * Timeout function since user did not respond
+     * send timeout message to DE1
+     * return back to initial screen
+     */
+    private void timeout (){
+        String message = Constants.CONFIRM_TIMEOUT;
+        MainActivity.btWrite(message);
+        final NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.action_detectFragment_to_initialFragment);
+        return;
     }
 
     /**

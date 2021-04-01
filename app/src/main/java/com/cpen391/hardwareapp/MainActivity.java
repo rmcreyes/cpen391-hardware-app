@@ -209,5 +209,11 @@ public class MainActivity extends AppCompatActivity {
             btThread.WriteToBTDevice(msg);
         }
     }
+
+    /* disable using back button on this app */
+    @Override
+    public void onBackPressed() {
+
+    }
 }
 
