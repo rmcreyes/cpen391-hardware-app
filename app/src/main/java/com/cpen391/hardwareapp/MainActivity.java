@@ -141,11 +141,25 @@ public class MainActivity extends AppCompatActivity {
                 Paireddevices.add(aNewdevice);
             }
 
-            if(Paireddevices.size()> 1){
-                Toast.makeText(context, "More than one device paired, connecting to the first one", Toast.LENGTH_LONG).show();
+            BluetoothDevice HCDevice = null;
+            if(Paireddevices.size() == 0) {
+                Toast.makeText(context, "No paired Devices. Will fail.", Toast.LENGTH_LONG).show();
             }
+
+            for (BluetoothDevice elem : Paireddevices) {
+                if (elem.getName().equals(Constants.BLUETOOTH_DEVICE_NAME_RFS)) {
+                    HCDevice = elem;
+                    break;
+                }
+            }
+
+            if (HCDevice == null) {
+                Toast.makeText(context, "Could not find RFS Bluetooth pairing, using first paired device.", Toast.LENGTH_LONG).show();
+                HCDevice = Paireddevices.get(0);
+            }
+
             /* connect to first paired device */
-            CreateSerialBluetoothDeviceSocket(Paireddevices.get(0));
+            CreateSerialBluetoothDeviceSocket(HCDevice);
             ConnectToSerialBlueToothDevice();
 
             /* Start bluetooth thread */
