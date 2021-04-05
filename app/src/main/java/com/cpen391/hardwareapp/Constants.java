@@ -21,5 +21,5 @@ public class Constants {
     public static final String OK = "OK";
     public static final String CONFIRM = "CONFIRM";
     public static final String LEAVE = "LEAVE";
-
+    public static final String BLUETOOTH_DEVICE_NAME_RFS = "hc01.com HC-05";
 }
