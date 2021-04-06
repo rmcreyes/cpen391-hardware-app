@@ -1,4 +1,4 @@
-# CPEN 391 User App
+# CPEN 391 Hardware App
 
 ![Build](https://github.com/rmcreyes/cpen391-hardware-app/workflows/Build/badge.svg)
 
