@@ -60,7 +60,7 @@ public class OccupiedFragment extends btFragment {
 
     /**
      * Received data from the DE1
-     * We are expecting a string in the format "END,ABCABC" where ABCABC is the plate number
+     * We are expecting a string in the format "OK,LEAVE"
      *
      * Messages in any other formats are ignored
      */
