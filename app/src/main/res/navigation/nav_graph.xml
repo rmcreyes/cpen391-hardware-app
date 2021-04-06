@@ -10,9 +10,6 @@
         android:label="fragment_initial"
         tools:layout="@layout/fragment_initial" >
         <action
-            android:id="@+id/action_initialFragment_to_plateFragment"
-            app:destination="@id/plateFragment" />
-        <action
             android:id="@+id/action_initialFragment_to_detectFragment"
             app:destination="@id/detectFragment" />
     </fragment>
@@ -31,6 +28,9 @@
             android:name="plateNo"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_plateFragment_to_initialFragment"
+            app:destination="@id/initialFragment" />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_paymentFragment_to_occupiedFragment"
             app:destination="@id/occupiedFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_initialFragment"
+            app:destination="@id/initialFragment" />
     </fragment>
     <fragment
         android:id="@+id/detectFragment"
@@ -55,6 +58,9 @@
         <action
             android:id="@+id/action_detectFragment_to_paymentFragment"
             app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_detectFragment_to_initialFragment"
+            app:destination="@id/initialFragment" />
     </fragment>
     <fragment
         android:id="@+id/occupiedFragment"

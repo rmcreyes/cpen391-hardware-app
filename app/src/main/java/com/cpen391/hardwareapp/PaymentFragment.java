@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ public class PaymentFragment extends btFragment {
     private View v;
     private String plateNo;
     private Bundle bundle = new Bundle();
+    private long timeLeftInMillis = 2*60*1000; // 2 minutes timeout for waiting for an confirmation
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -44,6 +48,7 @@ public class PaymentFragment extends btFragment {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel(); // stop the timer since user confirmed
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
                 EditText expDateEdit = v.findViewById(R.id.expDateEdit);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
@@ -52,6 +57,30 @@ public class PaymentFragment extends btFragment {
                 sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
             }
         });
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+            }
+
+            @Override
+            public void onFinish() {
+                timeout();
+            }
+        }.start();
+    }
+
+    /**
+     * Timeout function since user did not respond
+     * send timeout message to DE1
+     * return back to initial screen
+     */
+    private void timeout (){
+        String message = Constants.PAYMENT_TIMEOUT;
+        MainActivity.btWrite(message);
+        final NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.action_paymentFragment_to_initialFragment);
+        return;
     }
 
     /**

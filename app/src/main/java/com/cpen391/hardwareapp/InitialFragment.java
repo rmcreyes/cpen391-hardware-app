@@ -29,15 +29,6 @@ public class InitialFragment extends btFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         final NavController navController = Navigation.findNavController(v);
-
-        /* User Manually starting parking instance */
-        Button enterBtn = v.findViewById(R.id.EnterBtn);
-        enterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.action_initialFragment_to_plateFragment);
-            }
-        });
     }
 
     /**
