@@ -4,18 +4,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class PaymentFragment extends btFragment {
@@ -50,11 +47,14 @@ public class PaymentFragment extends btFragment {
             public void onClick(View view) {
                 countDownTimer.cancel(); // stop the timer since user confirmed
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
-                EditText expDateEdit = v.findViewById(R.id.expDateEdit);
+                EditText expDateEditMM = v.findViewById(R.id.expDateEditMM);
+                EditText expDateEditYY = v.findViewById(R.id.expDateEditYY);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
+
+                String ExpDate = expDateEditMM.getText().toString() + "/" + expDateEditYY.getText().toString();
                 confirmBtn.setEnabled(false);
 
-                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
+                sendPayment(cardEdit.getText().toString(),ExpDate,cvvEdit.getText().toString());
             }
         });
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {

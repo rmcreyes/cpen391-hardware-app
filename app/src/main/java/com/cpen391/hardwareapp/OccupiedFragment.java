@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class OccupiedFragment extends btFragment {
         String[] strArray = msg.split(",", 2);
         if (strArray[0].equals(Constants.OK)){
             final NavController navController = Navigation.findNavController(v);
-            if(strArray[1].equals(Constants.LEAVE)) {
+            if(strArray[1].trim().equals(Constants.LEAVE)) {
                 navController.navigate(R.id.action_occupiedFragment_to_initialFragment);
             }
         }

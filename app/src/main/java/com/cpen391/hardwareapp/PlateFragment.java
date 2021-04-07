@@ -57,15 +57,9 @@ public class PlateFragment extends btFragment {
                 countDownTimer.cancel(); // stop the timer since user confirmed
                 plateNo = plateNoText.getText().toString().toUpperCase();
 
-                /* check if entered plate number is valid */
-                if(plateNo.length() != 6){
-                    Toast.makeText(getContext(), "Invalid Entry: Please enter a valid 6 digit plate number", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    bundle.putString(Constants.plateNo, plateNo);
-                    confirmBtn.setEnabled(false);
-                    sendPlateNo(plateNo);
-                }
+                bundle.putString(Constants.plateNo, plateNo);
+                confirmBtn.setEnabled(false);
+                sendPlateNo(plateNo);
             }
         });
 
