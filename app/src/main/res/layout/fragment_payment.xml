@@ -77,7 +77,7 @@
             android:layout_margin="8dp"
             android:layout_weight="0.35"
             android:hint="@string/Exp_example_MM"
-            android:inputType="date|number" />
+            android:inputType="number" />
 
         <TextView
             android:id="@+id/slash"
@@ -94,7 +94,7 @@
             android:layout_margin="8dp"
             android:layout_weight="0.35"
             android:hint="@string/Exp_example_YY"
-            android:inputType="date|number" />
+            android:inputType="number" />
 
     </LinearLayout>
 

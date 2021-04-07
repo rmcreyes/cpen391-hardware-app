@@ -31,7 +31,7 @@ public class PlateFragment extends btFragment {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_plate, container, false);
 
-        plateNo = getArguments().getString(Constants.plateNo,"");
+        plateNo = getArguments().getString(Constants.plateNo,"").trim();
         /* User wants to modify the detected plate number */
         EditText plateNoText = v.findViewById(R.id.PlateNumber);
         plateNoText.setText(plateNo);
@@ -55,7 +55,7 @@ public class PlateFragment extends btFragment {
             @Override
             public void onClick(View view) {
                 countDownTimer.cancel(); // stop the timer since user confirmed
-                plateNo = plateNoText.getText().toString().toUpperCase();
+                plateNo = plateNoText.getText().toString().toUpperCase().trim();
 
                 bundle.putString(Constants.plateNo, plateNo);
                 confirmBtn.setEnabled(false);
