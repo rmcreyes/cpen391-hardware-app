@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 public class PlateFragment extends btFragment {
     private View v;
     private String plateNo;
@@ -55,11 +57,18 @@ public class PlateFragment extends btFragment {
             @Override
             public void onClick(View view) {
                 countDownTimer.cancel(); // stop the timer since user confirmed
-                plateNo = plateNoText.getText().toString().toUpperCase().trim();
+                plateNo = plateNoText.getText().toString().toUpperCase();
+                Pattern p = Pattern.compile("[^A-Z0-9 ]");
 
-                bundle.putString(Constants.plateNo, plateNo);
-                confirmBtn.setEnabled(false);
-                sendPlateNo(plateNo);
+                /* check if entered plate number is valid */
+                if(p.matcher(plateNo).find()){
+                    Toast.makeText(getContext(), "Invalid Entry: Please enter a valid plate number with only letters and spaces.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    bundle.putString(Constants.plateNo, plateNo);
+                    confirmBtn.setEnabled(false);
+                    sendPlateNo(plateNo);
+                }
             }
         });
 
