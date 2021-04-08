@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static void btWrite(String msg){
         if (btThread != null) {
+            msg = msg.trim();
             Log.d("BTDEBUG","sending "+ msg);
             btThread.WriteToBTDevice(msg);
         }
