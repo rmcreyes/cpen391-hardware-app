@@ -4,18 +4,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class PaymentFragment extends btFragment {
@@ -50,11 +47,41 @@ public class PaymentFragment extends btFragment {
             public void onClick(View view) {
                 countDownTimer.cancel(); // stop the timer since user confirmed
                 EditText cardEdit = v.findViewById(R.id.CardEdit);
-                EditText expDateEdit = v.findViewById(R.id.expDateEdit);
+                EditText expDateEditMM = v.findViewById(R.id.expDateEditMM);
+                EditText expDateEditYY = v.findViewById(R.id.expDateEditYY);
                 EditText cvvEdit = v.findViewById(R.id.cvvEdit);
+
+                String expDateMM = expDateEditMM.getText().toString();
+                String expDateYY = expDateEditYY.getText().toString();
+
+                try {
+                    int MM = Integer.parseInt(expDateMM);
+                    int YY = Integer.parseInt(expDateYY);
+                    if (MM > 12 || MM < 1 || YY > 99 || YY < 0) {
+                        Toast.makeText(getContext(), "Invalid expiry date: Please use a month between 01 and 12 and a valid 2-digit year", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getContext(), "Invalid expiry date: Please use valid numbers.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String CardNum = cardEdit.getText().toString();
+                String CVV = cvvEdit.getText().toString();
+
+                if(CardNum.length() < 13 || CardNum.length() > 19){
+                    Toast.makeText(getContext(), "Invalid Card Number: Please enter between 13 and 19 digits.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(CVV.length() != 3){
+                    Toast.makeText(getContext(), "Invalid CVV: Please use a 3-digit CVV.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String ExpDate = expDateMM + "/" + expDateYY;
                 confirmBtn.setEnabled(false);
 
-                sendPayment(cardEdit.getText().toString(),expDateEdit.getText().toString(),cvvEdit.getText().toString());
+                sendPayment(CardNum,ExpDate,CVV);
             }
         });
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {

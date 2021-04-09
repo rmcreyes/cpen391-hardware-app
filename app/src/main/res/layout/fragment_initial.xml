@@ -21,15 +21,17 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:gravity="center">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="AVAILABLE"
+            android:fontFamily="@font/aldrich"
             android:gravity="center"
-            android:textSize="60dp"
+            android:text="AVAILABLE"
 
             android:textColor="@color/teal_700"
-            android:textStyle="bold"/>
+            android:textSize="60dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -71,13 +71,31 @@
             android:text="@string/Exp_Date" />
 
         <EditText
-            android:id="@+id/expDateEdit"
-            android:layout_width="26dp"
+            android:id="@+id/expDateEditMM"
+            android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:hint="@string/Exp_example"
-            android:inputType="date|number" />
+            android:layout_weight="0.35"
+            android:hint="@string/Exp_example_MM"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:text="/"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/expDateEditYY"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="0.35"
+            android:hint="@string/Exp_example_YY"
+            android:inputType="number" />
+
     </LinearLayout>
 
     <LinearLayout
