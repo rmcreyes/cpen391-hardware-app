@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.navHostFragment);
                         btFragment fragment = (btFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
                         fragment.readBtData(readMessage);
+                        readMessage.replaceAll("\\p{C}", "?"); // remove all non-unicode strings
                         Log.d("BTDEBUG","receiving "+ readMessage);
                 }
             }
@@ -222,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
     public static void btWrite(String msg){
         if (btThread != null) {
             msg = msg.trim();
+            msg.replaceAll("\\p{C}", "?"); // remove all non-unicode strings
             Log.d("BTDEBUG","sending "+ msg);
             btThread.WriteToBTDevice(msg);
         }
